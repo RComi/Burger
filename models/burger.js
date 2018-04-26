@@ -1,25 +1,22 @@
-var orm = require("./config/orm.js");
+var orm = require("../config/orm.js");
 
 var burger = {
-    all: function(cb) {
-        orm.all("burgers", function(result){
-            cb(result)
-        });
-    },
-    create: function(name, cb) {
-        orm.create("burgers", ["burger_name", "devoured"], [name, false], cb);
-    },
-    update: function(id, cb) {
-        var condition = "id=" + id;
-        orm.update("burgers", {devoured: true}, condition, cb);
-    },
-    delete: function() {
-        orm.delete(   );
-    },
-}
-
-
-
-
+  selectAll: function(cb) {
+    orm.selectAll("burger", function(res) {
+      cb(res);
+    });
+  },
+  // The variables cols and vals are arrays.
+  insertOne: function(cols, vals, cb) {
+    orm.insertOne("burger", cols, vals, function(res) {
+      cb(res);
+    });
+  },
+  updateOne: function(objColVals, condition, cb) {
+    orm.updateOne("burger", objColVals, condition, function(res) {
+      cb(res);
+    });
+  }
+};
 
 module.exports = burger;
