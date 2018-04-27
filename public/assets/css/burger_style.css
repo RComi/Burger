@@ -1,0 +1,47 @@
+body {
+  padding-bottom: 10px;
+  font-family: "Times New Roman", Times, serif;
+  background-image: url("/assets/img/diner.png");
+  background-attachment: fixed;
+  background-position: center;
+}
+
+h3 {
+  font-weight: bold;
+}
+
+h2 {
+  font-weight: bold;
+}
+
+.burger-logo {
+  height: 120px;
+  width: 120px;
+  margin: 10px 80px;
+}
+
+.row-margin {
+  margin-top: 5px;
+}
+
+.row-margin-card {
+  margin-top: 25px;
+}
+
+.pre-scrollable {
+  overflow-x: hidden;
+}
+
+.card-header {
+  background-color: khaki;
+  color: black;
+}
+
+.card-body {
+  background-color:#ffffff;
+  color: #000000;
+}
+
+.card{
+    border: 2px solid #000000;
+}

@@ -1,91 +1,100 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-4">
-      <h1>The Burger I Want!</h1>
-      <form id="orderForm">
-        <div class="form-group">
-          <textarea class="form-control" type="text" name="burger" id="order"></textarea>
-          <br>
-          <button class="btn btn-success" type="submit" >Order</button>
-        </div>
-      </form>
-    </div>
-    <div class="col-md-4">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-7">
-      <h3>Available Burgers</h3>
-      {{#each burger}} {{#unless this.devoured}}
-      <div class="row" style="margin-top: 5px;">
-        <div class="col-md-5">
-          <h5>
-            {{this.id}}. {{this.burger_name}}
-          </h5>
-        </div>
-        <div class="col-md-2">
-          <button class="btn btn-primary eatBurger" type="button" value="{{this.id}}">Devour</button>
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <img class="burger-logo" src="/assets/img/burger.png" alt="Burger Logo">
+      <div class="card">
+        <h2 class="card-header">What'll You Have?</h2>
+        <div class="card-body order-form">
+          <form id="orderForm">
+            <div class="form-group">
+              <textarea class="form-control" type="text" name="burger" id="order" placeholder="Enter your order here..."></textarea>
+              <br>
+              <button class="btn btn-lg btn-warning" type="submit">Order</button>
+            </div>
+          </form>
         </div>
       </div>
-      {{/unless}} {{/each}}
     </div>
-    <div class="col-md-5">
-      <h3>Devoured Burgers</h3>
-      {{#each burger}} {{#if this.devoured}}
-      <h5>
-        {{this.id}}. {{this.burger_name}}
-      </h5>
-      {{/if}} {{/each}}
+  </div>
+  <div class="row row-margin-card justify-content-between">
+    <div class="col-md-6">
+      <div class="card">
+        <h3 class="text-center card-header">
+          Available Burgers
+        </h3>
+        <div class="card-body">
+          {{!-- Will go through each burger and populate the available burgers if it has not been devoured (i.e.) devourded value is
+          0 in the db --}} {{#each burger}} {{#unless this.devoured}}
+          <div class="row row-margin">
+            <div class="col-md-8 text-left">
+              <h5>
+                #{{this.id}}. {{this.burger_name}}
+              </h5>
+            </div>
+            <div class="col-md-4 text-right">
+              <button class="btn btn-danger eatBurger" type="button" value="{{this.id}}">Devour</button>
+            </div>
+          </div>
+          {{/unless}} {{/each}}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 text-center">
+      <div class="card">
+        <h3 class="card-header">Devoured Burgers</h3>
+        <div class="card-body">
+          {{!-- will go through each burger and if it is devoured then it will populate it to the devoured list --}} {{#each burger}}
+          {{#if this.devoured}}
+          <h5>
+            #{{this.id}}. {{this.burger_name}}
+          </h5>
+          {{/if}} {{/each}}
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <script type="text/javascript">
-  //When the submit button is clicked it gets the user input and finds the best match
+  //When the submit button is clicked it gets the user input and stores the name in the newBurger var
   $("#orderForm").on('submit', function (event) {
     event.preventDefault();
     var newBurger = {
       name: $("#order").val().trim(),
       devoured: false
     };
-
-    console.log($("#order").val().trim())
-
-    // Send the POST request.
+    // Send the POST request and user input data to be populated in the db
+    //once it has successfully posted the data the page will reload
     $.ajax("/api/burger", {
       type: "POST",
       data: newBurger
     }).then(
       function () {
-        console.log("created new burger");
-        // Reload the page to get the updated list
+        // Reload the page to get the all the burgers
         location.reload();
       }
     );
   });
 
+  //When any of the devour buttons are clicked it gets the current button pressed value 
+  //and stores it in var id and will also store new devoured status of true
   $(".eatBurger").on('click', function (event) {
     var id = $(this).val().trim();
-    var name = $("#order").val().trim();
     var devoured = true;
 
     var newBurger = {
       id: id,
-      name: name,
       devoured: devoured
     };
-    console.log($(this).val().trim())
 
-    // Send the POST request.
+    // Send the PUT request and will take in the id and pass it to update the corresponding 
+    //id in the database and reload the page once the burger has been devoured
     $.ajax("/api/burger/" + id, {
       type: "PUT",
       data: newBurger
     }).then(
       function () {
-        console.log("created new burger");
-        // Reload the page to get the updated list
+        // Reload the page to get the all the burgers
         location.reload();
       }
     );
