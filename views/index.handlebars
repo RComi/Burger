@@ -24,7 +24,8 @@
   $("#orderForm").on('submit', function (event) {
     event.preventDefault();
     var newBurger = {
-      name: $("#order").val().trim()
+      name: $("#order").val().trim(),
+      devoured: false
     };
 
     console.log($("#order").val().trim())
