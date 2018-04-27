@@ -18,12 +18,22 @@ var orm = {
   insertOne: function(table, cols, vals, cb) {
     var queryString =
       "INSERT INTO " + table + "(" + cols + ") VALUES ('" + vals + "')";
-    console.log(vals);
-    console.log(queryString);
-    connection.query(queryString, [vals], function(err, result) {
+    connection.query(queryString, vals, function(err, result) {
       if (err) {
         throw err;
       }
+
+      cb(result);
+    });
+  },
+  updateOne: function(table, val, cb) {
+    var queryString = "UPDATE " + table + " SET devoured = 1 WHERE id = " + val;
+    console.log(queryString);
+    connection.query(queryString, val, function(err, result) {
+      if (err) {
+        throw err;
+      }
+
       cb(result);
     });
   }

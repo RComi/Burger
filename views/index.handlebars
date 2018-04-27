@@ -1,20 +1,43 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
       <h1>The Burger I Want!</h1>
       <form id="orderForm">
-        <textarea type="text" name="burger" id="order"></textarea>
-        <button type="submit">Order</button>
+        <div class="form-group">
+          <textarea class="form-control" type="text" name="burger" id="order"></textarea>
+          <br>
+          <button class="btn btn-success" type="submit" >Order</button>
+        </div>
       </form>
+    </div>
+    <div class="col-md-4">
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-7">
       <h3>Available Burgers</h3>
-      {{#each burger}}
-      <p>{{this.id}}. {{this.burger_name}}</p>
-      {{/each}}
-      </ul>
+      {{#each burger}} {{#unless this.devoured}}
+      <div class="row" style="margin-top: 5px;">
+        <div class="col-md-5">
+          <h5>
+            {{this.id}}. {{this.burger_name}}
+          </h5>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary eatBurger" type="button" value="{{this.id}}">Devour</button>
+        </div>
+      </div>
+      {{/unless}} {{/each}}
+    </div>
+    <div class="col-md-5">
+      <h3>Devoured Burgers</h3>
+      {{#each burger}} {{#if this.devoured}}
+      <h5>
+        {{this.id}}. {{this.burger_name}}
+      </h5>
+      {{/if}} {{/each}}
     </div>
   </div>
 </div>
@@ -33,6 +56,31 @@
     // Send the POST request.
     $.ajax("/api/burger", {
       type: "POST",
+      data: newBurger
+    }).then(
+      function () {
+        console.log("created new burger");
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+
+  $(".eatBurger").on('click', function (event) {
+    var id = $(this).val().trim();
+    var name = $("#order").val().trim();
+    var devoured = true;
+
+    var newBurger = {
+      id: id,
+      name: name,
+      devoured: devoured
+    };
+    console.log($(this).val().trim())
+
+    // Send the POST request.
+    $.ajax("/api/burger/" + id, {
+      type: "PUT",
       data: newBurger
     }).then(
       function () {
